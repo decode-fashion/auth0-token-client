@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import React, { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const App = () => {
   const {
@@ -25,7 +26,7 @@ const App = () => {
 
   return (
     <div className="flex items-center justify-center h-[100vh] text-white bg-zinc-800">
-      {isLoading && (<span class="loading loading-dots loading-lg text-info"></span>)}
+      {isLoading && (<span className="loading loading-dots loading-lg text-info"></span>)}
       {(!isAuthenticated && !isLoading) ? (<button
         className="border-2 border-blue-300 hover:bg-blue-300 w-32 h-10 rounded-md"
         onClick={() => loginWithRedirect()}
@@ -37,14 +38,18 @@ const App = () => {
         <div className=" p-5 rounded-xl w-1/3 h-1/4 flex flex-row gap-5 bg-zinc-700">
           <img className="rounded-md" src={user.picture} />
           <div className="w-full h-full border-l-2 border-blue-300 flex flex-col items-center">
-            <section className="flex items-center flex-col gap-5">
+            <section className="flex items-center flex-col gap-5 mt-3">
               <p className="text-xl font-black">{`${user.nickname} (${user.email})`}</p>
               <div className="flex flex-col w-[85%]">
                 Access token:
                 <textarea
-                  className="bg-zinc-400 rounded-md scrollbar-hide text-gray-600"
+                readOnly={true}
+                
+                  onClick={() => {navigator.clipboard.writeText(accessToken); toast.success("Copied to clipboard!")}}
+                  className="bg-zinc-700 rounded-md scrollbar-hide text-gray-400 focus:outline-none"
                   value={accessToken}
                 />
+                <Toaster />
               </div>
             </section>
             <section className="flex flex-row gap-3 mt-8 w-[85%] justify-center">
